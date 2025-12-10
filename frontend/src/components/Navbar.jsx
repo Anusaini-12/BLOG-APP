@@ -200,7 +200,7 @@ const Navbar = () => {
            to="/admin"
            className="px-3 py-2 rounded-lg hover:bg-white/20 transition"
          >
-          <i className="fa-solid fa-user-shield"></i> Admin
+          <i className="fa-solid fa-crown mr-4"></i> Admin
          </Link>
           )}
 
