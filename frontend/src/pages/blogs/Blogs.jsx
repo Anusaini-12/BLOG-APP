@@ -43,7 +43,7 @@ const Blogs = () => {
       setLoading(false);
     }
     };
-    if(user) fetchBlogs();
+    fetchBlogs();
   }, [user]);
 
   //toggle category
