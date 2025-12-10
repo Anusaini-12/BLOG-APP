@@ -275,13 +275,17 @@ const BlogDetails = () => {
             {/* Author */}
             <div className="flex items-center justify-between border-b border-white/5 pb-8 mb-8">
               <div className="flex items-center gap-4">
+                <Link to={`/profile/${blog.author._id}`} className="relative group/avatar">
                 <img
                   src={user?.profilePic || `https://ui-avatars.com/api/?name=${blog.author?.name}&background=random`}
                   alt={blog.author?.name}
-                  className="w-10 h-10 md:w-12 md:h-12 rounded-full ring-3 ring-pink-600/20 object-cover"
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-white/10 group-hover/avatar:border-pink-500 transition-colors object-cover cursor-pointer"
                 />
+                </Link>
                 <div>
-                  <p className="text-white font-semibold">{blog.author?.name}</p>
+                <Link to={`/profile/${blog.author._id}`} className="text-sm font-semibold text-slate-200 hover:text-pink-400 transition-colors">
+                  {blog.author.name}
+                </Link>
                   <p className="text-slate-300 text-sm">{timeAgo(blog.createdAt)}</p>
                 </div>
               </div>
@@ -352,7 +356,12 @@ const BlogDetails = () => {
             ) : (
               comments.map((comment) => (
                 <div key={comment._id} className="flex gap-4 animate-fadeIn">
-                  <img src={comment.user?.profilePic || `https://ui-avatars.com/api/?name=${comment.user?.name}&background=random`} alt={comment.user?.name || "User"} className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover ring-1 ring-white/10 mt-1" />
+                  <Link to={`/profile/${blog.author._id}`} className="relative group/avatar">
+                  <img 
+                   src={comment.user?.profilePic || `https://ui-avatars.com/api/?name=${comment.user?.name}&background=random`} 
+                   alt={comment.user?.name || "User"} 
+                   className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover ring-1 ring-white/10 group-hover/avatar:ring-pink-500 transition-colors cursor-pointer mt-1" />
+                  </Link>      
 
                   <div className="flex-1">
                     {/* Header */}

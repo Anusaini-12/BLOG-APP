@@ -4,10 +4,12 @@ import { useAuth } from "../../context/AuthContext";
 import { getUserById, followUser, unfollowUser } from "../../api/profileApi.js";
 import { getBlogs } from "../../api/blogApi.js";
 import Navbar from "../../components/Navbar";
+import { useToast } from "../../context/ToastContext.jsx";
 
 const UserProfile = () => {
   const { id } = useParams();
   const { user, token, updateUser } = useAuth();
+  const toast = useToast();
 
   const [profileUser, setProfileUser] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
@@ -46,6 +48,11 @@ useEffect(() => {
 
 
   const handleFollow = async () => {
+
+  if (!user) {
+    toast.error("Login first to follow users", { id: "login" });
+    return;
+  }
     if (loading || !profileUser) return;
     setLoading(true);
 
