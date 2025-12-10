@@ -100,7 +100,7 @@ const SignUp = () => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div className="py-4 md:py-10 text-center flex flex-col items-center justify-center text-white">
+        <div className="py-2 md:py-10 text-center flex flex-col items-center justify-center text-white">
           <h2 className="text-xl md:text-2xl text-white font-bold mb-6">Create Account</h2>
 
           <form onSubmit={handleSubmit} className='flex flex-col gap-1'>
@@ -157,6 +157,17 @@ const SignUp = () => {
               Sign up
           </Loader>
           </form>
+
+          <p className="md:hidden text-md text-center text-gray-400 mt-10">
+            Already have an account?   
+          </p>
+
+          <Link
+            to="/login"
+            className="md:hidden font-semibold hover:shadow-lg text-pink-500 hover:text-pink-700 hover:underline transition"
+          >
+            Login
+          </Link>
         </div>
 
       </div>

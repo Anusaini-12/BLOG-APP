@@ -59,7 +59,9 @@ const Login = () => {
       login(res.user, res.token);
 
       toast.success(res.message || "Login successful!", { id: "login-success" });
-      navigate("/");
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
      
     } catch (err){
       toast.error(err.response?.data?.message || "Something went wrong.", { id: "login-fail" });
@@ -125,8 +127,18 @@ const Login = () => {
           <Loader loading={loading}>
               Login
           </Loader>
-
           </form>
+          
+          <p className="md:hidden text-md text-center text-gray-400 mt-10">
+            Don't have an account yet?  
+          </p>
+
+          <Link
+            to="/register"
+            className="md:hidden font-semibold hover:shadow-lg text-pink-500 hover:text-pink-700 hover:underline transition"
+          >
+            Sign up
+          </Link>
         </div>
         
         {/* RIGHT SIDE */}

@@ -94,7 +94,7 @@ const BlogDetails = () => {
       await deleteBlog(blog?._id || id, token);
       setOpenConfirm(false);
       toast.success("Blog deleted!", { id: "blog-delete" });
-      navigate("/blogs");
+      setTimeout(() => navigate("/blogs"), 2000);
     } catch (err) {
       console.error("deleteBlog error:", err);
       toast.error("Failed to delete blog", { id: "blog-delete-fail" });
@@ -268,7 +268,7 @@ const BlogDetails = () => {
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white mt-10 mb-6">
+            <h1 className={`text-3xl md:text-5xl font-extrabold text-white ${blog.image ? "mt-10" : "mt-16 ml-6"} mb-6`}>
               {blog.title}
             </h1>
 
@@ -276,9 +276,9 @@ const BlogDetails = () => {
             <div className="flex items-center justify-between border-b border-white/5 pb-8 mb-8">
               <div className="flex items-center gap-4">
                 <img
-                  src={user.profilePic || `https://ui-avatars.com/api/?name=${blog.author.name}&background=random`}
+                  src={user?.profilePic || `https://ui-avatars.com/api/?name=${blog.author?.name}&background=random`}
                   alt={blog.author?.name}
-                  className="w-12 h-12 rounded-full ring-3 ring-pink-600/20 object-cover"
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-full ring-3 ring-pink-600/20 object-cover"
                 />
                 <div>
                   <p className="text-white font-semibold">{blog.author?.name}</p>
@@ -321,7 +321,7 @@ const BlogDetails = () => {
           {/* ADD COMMENT */}
           {user ? (
             <div className="flex gap-4 mb-6 group">
-              <img src={user.profilePic || `https://ui-avatars.com/api/?name=${blog.author.name}&background=random`} alt="My Avatar" className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover ring-2 ring-pink-500/20" />
+              <img src={user.profilePic || `https://ui-avatars.com/api/?name=${user?.name || 'User'}&background=random`} alt="My Avatar" className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover ring-2 ring-pink-500/20" />
               <div className="flex-1 relative">
                 <textarea
                   className="w-full bg-pink-700/20 text-slate-200 rounded-2xl border border-white/10 p-4 pr-12 focus:ring-1 focus:ring-pink-500/50 outline-none resize-none min-h-[80px]"
@@ -336,7 +336,12 @@ const BlogDetails = () => {
             </div>
           ) : (
             <div className="p-6 bg-slate-800/30 rounded-2xl border border-white/5 text-center mb-8">
-              <p className="text-slate-400">Please <button className="text-purple-400 font-semibold hover:underline">login</button> to join the discussion.</p>
+              <p className="text-slate-400">
+                Please 
+                <Link 
+                 to="/login"
+                 className="text-purple-400 font-semibold hover:underline"> login
+                 </Link> to join the discussion.</p>
             </div>
           )}
 
