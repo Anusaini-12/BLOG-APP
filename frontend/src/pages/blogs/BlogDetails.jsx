@@ -356,7 +356,7 @@ const BlogDetails = () => {
             ) : (
               comments.map((comment) => (
                 <div key={comment._id} className="flex gap-4 animate-fadeIn">
-                  <Link to={`/profile/${blog.author._id}`} className="relative group/avatar">
+                  <Link to={`/profile/${comment.user?._id}`} className="relative group/avatar">
                   <img 
                    src={comment.user?.profilePic || `https://ui-avatars.com/api/?name=${comment.user?.name}&background=random`} 
                    alt={comment.user?.name || "User"} 
