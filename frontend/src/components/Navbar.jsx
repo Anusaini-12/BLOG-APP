@@ -74,9 +74,9 @@ const Navbar = () => {
           {user && (
             <div className="relative">
               <img
-                src={user.profile || profile}
+                src={user?.profilePic || `https://ui-avatars.com/api/?name=${user?.name}&background=random`}
                 alt="Profile"
-                className="w-12 h-12 rounded-full object-cover cursor-pointer ring-2 ring-transparent hover:ring-pink-500 transition"
+                className="w-12 h-12 rounded-full object-cover cursor-pointer ring-3 ring-white/10 hover:ring-pink-500 transition"
                 onClick={() => setProfileOpen(!profileOpen)}
               />
 

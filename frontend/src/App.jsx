@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
@@ -12,13 +12,29 @@ import About from './pages/blogs/About';
 import EditBlog from './pages/blogs/EditBlog';
 import MyProfile from './pages/profile/MyProfile';
 import UserProfile from './pages/profile/UserProfile';
-import AdminPanel from './pages/admin/AdminPanel';
+import AdminProtected from './pages/admin/AdminProtected';
+import AdminLayout from './pages/admin/AdminLayout';
+import UsersPage from './pages/admin/UsersPage';
+import BlogsPage from './pages/admin/BlogsPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
 
 const App = () => {
+
+  
   
   return (
      <BrowserRouter>
         <Routes>
+        
+        {/* Admin Protected Section */}
+        <Route element={<AdminProtected />}>
+          <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<UsersPage />} />
+          <Route path="blogs" element={<BlogsPage />} />
+         </Route>
+        </Route>
+ 
           <Route path="/" element={<Home />} /> 
           <Route path="/about" element={<About />} /> 
           <Route path="/blogs" element={<Blogs />} />  
@@ -38,7 +54,7 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />    
 
-          <Route path="/admin" element={<AdminPanel />} />
+          {/* <Route path="/admin" element={<AdminPanel />} /> */}
         </Routes>
      </BrowserRouter>
   )

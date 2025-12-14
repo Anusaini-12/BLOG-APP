@@ -49,7 +49,19 @@ const blogSchema = new mongoose.Schema({
   isPublished: { 
     type: Boolean,
     default: true
+  },
+
+  views: {                
+    type: Number,
+    default: 0
+  },
+
+  viewers: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   }
+  ],
 },
   {timestamps: true}
 );

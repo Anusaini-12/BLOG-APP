@@ -8,6 +8,7 @@ import {
   updateComment,
   deleteComment,
   deleteBlog,
+  countBlogView,
 } from "../../api/blogApi";
 import { useAuth } from "../../context/AuthContext";
 import { ConfirmDelete } from "../../components/ConfirmDelete";
@@ -19,6 +20,32 @@ const BlogDetails = () => {
   const { user, token } = useAuth();
   const toast = useToast();
 
+useEffect(() => {
+  if (!user || !id) return; 
+
+  const recordView = async () => {
+    try {
+      const res = await countBlogView(id, token);
+
+      setBlog(prev =>
+        prev ? { ...prev, views: res.views } : prev
+      );
+
+      // const uniqueViewers = Array.from(
+      //   new Map(res.viewers.map(v => [v._id, v])).values()
+      // );
+
+      // setViewers(uniqueViewers);
+    } catch (err) {
+      console.error("Failed to count view", err);
+    }
+  };
+
+  recordView();
+}, [id, user, token]);
+
+
+
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [comments, setComments] = useState([]);
@@ -27,7 +54,7 @@ const BlogDetails = () => {
   const [editingText, setEditingText] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
-
+ 
   useEffect(() => {
     fetchAll();
   }, [id, user]);
@@ -236,7 +263,6 @@ const BlogDetails = () => {
               </span>
               <i className="fa-solid fa-trash-can text-sm md:text-xs"></i>              
             </button>
-
             <ConfirmDelete open={openConfirm} onClose={() => setOpenConfirm(false)} onConfirm={handleDeleteBlog} />
           </div>
         )}
@@ -256,8 +282,7 @@ const BlogDetails = () => {
             </div>
           )}
 
-          <div className="px-4 py-10 md:px-14 md:py-12 -mt-20 relative">
-
+          <div className="px-4 py-10 md:px-8 md:py-4 relative">
             {/* Tags */}
             <div className="flex flex-wrap gap-2 mb-6">
               {blog.tags.map(tag => (
@@ -268,7 +293,7 @@ const BlogDetails = () => {
             </div>
 
             {/* Title */}
-            <h1 className={`text-3xl md:text-5xl font-extrabold text-white ${blog.image ? "mt-10" : "mt-16 ml-6"} mb-6`}>
+            <h1 className={`text-3xl md:text-5xl font-extrabold text-white ${blog.image ? "mt-0" : "mt-16 ml-6"} mb-6`}>
               {blog.title}
             </h1>
 

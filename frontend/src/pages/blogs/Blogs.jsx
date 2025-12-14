@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { SlidersHorizontal, MessageSquareMore, Camera, Sparkles, Bookmark, Share2, ThumbsUp, Clock } from 'lucide-react';
-import { getBlogs, toggleLike } from "../../api/blogApi";
+import { SlidersHorizontal, MessageSquareMore, Camera, Sparkles, Bookmark, Share2, ThumbsUp, Clock, EyeIcon } from 'lucide-react';
+import { countBlogView, getBlogs, getBlogViewers, toggleLike } from "../../api/blogApi";
 import BlogSkeleton from "../../components/BlogSkeleton";
 import { categories, categoryColors } from "../../data/categories";
 import Navbar from "../../components/Navbar";
@@ -12,7 +12,6 @@ import { useToast } from "../../context/ToastContext";
 
 
 const Blogs = () => {
-
 
   const { user, token, updateUser} = useAuth();
   const toast = useToast();
@@ -200,14 +199,6 @@ const Blogs = () => {
     toast.success("Link copied to clipboard!", {id: "copied"});
   };
   
-  //read time blogs
-  const calculateReadingTime = (text) => {
-    const wpm = 200;
-    const words = text.trim().split(/\s+/).length;
-    return `${Math.ceil(words / wpm)} min read`;
-  };
-
-
   return (
     <div className="min-h-screen bg-gradient-to-bl from-pink-950 via-sky-800 to-slate-900 bg-fixed text-white">
       <Navbar className="sticky relative z-20" />
@@ -365,9 +356,11 @@ const Blogs = () => {
 
             {/* Category Badge - Mobile */}
             <div className="absolute top-4 left-4 z-20 md:hidden">
+              {blog.category ? (
               <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-lg backdrop-blur-md ${categoryColors[blog.category]}`}>
                 {blog.category}
               </span>
+              ): null}
             </div>
         </div>
       )}
@@ -386,7 +379,7 @@ const Blogs = () => {
                 />
               </Link>
               
-              <div className="flex flex-col ">
+              <div className="flex flex-col">
                 <Link to={`/profile/${blog.author._id}`} className="text-sm font-semibold text-slate-200 hover:text-pink-400 transition-colors">
                   {blog.author.name}
                 </Link>
@@ -394,16 +387,19 @@ const Blogs = () => {
                 <div className="flex items-center gap-2 text-[11px] text-slate-500">
                   <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
                   <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <Clock size={10} /> {calculateReadingTime(blog.content)}
-                  </span>
+                  {/* VIEW COUNT TOP-RIGHT */}
+                  <p>
+                    <i className="fa-solid fa-eye text-[10px]"></i> {blog.views}
+                  </p>
                 </div>
               </div>
             </div>
-
+           
+            {blog.category ? (
             <span className={`hidden md:block px-3 py-1 rounded-full text-xs font-semibold ${categoryColors[blog.category] || categoryColors.Default}`}>
               {blog.category}
             </span>
+            ) : null}
           </div>
 
           {/* Body */}
@@ -413,7 +409,7 @@ const Blogs = () => {
             </h2>
             <p className="text-slate-400 text-sm md:text-base leading-relaxed line-clamp-2 md:line-clamp-3">
               {blog.content}
-            </p>
+            </p>          
           </Link>
 
           {/* Footer */}

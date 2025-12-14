@@ -117,3 +117,32 @@ export const deleteComment = async (id, commentId, token) => {
   );
   return res.data;
 };
+
+// Count a blog view 
+export const countBlogView = async (id, token) => {
+  const res = await axios.put(
+    `${API_URL}/api/blogs/${id}/view`,
+    {}, 
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    }
+  );
+  return res.data;
+};
+
+//Get viewers of a blog
+export const getBlogViewers = async (id, token) => {
+  try {
+    const res = await axios.get(`${API_URL}/api/blogs/${id}/viewers`, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching blog viewers:", err);
+    return { viewers: [] };
+  }
+};

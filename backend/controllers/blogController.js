@@ -106,7 +106,7 @@ export const updateBlog = expressAsyncHandler(async (req, res) => {
   blog.category = category ?? blog.category;
   blog.tags = tags ?? blog.tags;
   blog.isPublished = publish ?? blog.isPublished;
-  if (imageUrl) blog.image = imageUrl;  // <-- update image here
+  if (imageUrl) blog.image = imageUrl;  
 
   const updatedBlog = await blog.save();
 
@@ -295,5 +295,44 @@ export const deleteComment = expressAsyncHandler( async(req, res) => {
     });
 });
 
+/* ------------------ COUNT VIEW ------------------ */
+export const countView = expressAsyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+  if (!blog) {
+    res.status(404);
+    throw new Error("Blog not found");
+  }
 
+  const userId = req.user._id;
 
+  // Only add the user if they haven't viewed before
+  if (!blog.viewers.some(v => v.toString() === userId.toString())) {
+    blog.viewers.push(userId);
+    blog.views += 1;
+    await blog.save();
+  }
+
+  // Populate viewers for frontend
+  await blog.populate("viewers", "name email");
+ 
+  res.status(200).json({
+    views: blog.views,
+    viewers: blog.viewers, // includes all previous + current viewers
+  });
+});
+
+/* ------------------ GET VIEWERS ------------------ */
+export const getViewers = expressAsyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id).populate("viewers", "name email");
+
+  if (!blog) {
+    res.status(404);
+    throw new Error("Blog not found!");
+  }
+
+  res.status(200).json({
+    success: true,
+    totalViews: blog.views,
+    viewers: blog.viewers,
+  });
+});
