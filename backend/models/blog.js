@@ -51,17 +51,18 @@ const blogSchema = new mongoose.Schema({
     default: true
   },
 
-  views: {                
-    type: Number,
-    default: 0
-  },
-
-  viewers: [
-  {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  }
-  ],
+    views: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+        viewedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
 },
   {timestamps: true}
 );

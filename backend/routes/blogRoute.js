@@ -11,7 +11,6 @@ import {
     getBlog, 
     getBlogs, 
     getComments, 
-    getViewers, 
     toggleLike, 
     updateBlog, 
     updateComment,
@@ -28,7 +27,6 @@ router.delete("/:id", protect, deleteBlog);
 router.put("/:id/like", protect, toggleLike);
 
 router.put("/:id/view", protect, countView);
-router.get("/:id/viewers", protect, getViewers); 
 
 router.get("/:id/comments", getComments)
 router.post("/:id/comments", protect, addComment); 

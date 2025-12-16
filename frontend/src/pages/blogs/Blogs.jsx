@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SlidersHorizontal, MessageSquareMore, Camera, Sparkles, Bookmark, Share2, ThumbsUp, Clock, EyeIcon } from 'lucide-react';
-import { countBlogView, getBlogs, getBlogViewers, toggleLike } from "../../api/blogApi";
+import { getBlogs, toggleLike } from "../../api/blogApi";
 import BlogSkeleton from "../../components/BlogSkeleton";
 import { categories, categoryColors } from "../../data/categories";
 import Navbar from "../../components/Navbar";
@@ -13,6 +13,7 @@ import { useToast } from "../../context/ToastContext";
 
 const Blogs = () => {
 
+  const navigate = useNavigate();
   const { user, token, updateUser} = useAuth();
   const toast = useToast();
   
@@ -387,10 +388,17 @@ const Blogs = () => {
                 <div className="flex items-center gap-2 text-[11px] text-slate-500">
                   <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
                   <span>•</span>
-                  {/* VIEW COUNT TOP-RIGHT */}
-                  <p>
-                    <i className="fa-solid fa-eye text-[10px]"></i> {blog.views}
-                  </p>
+
+                  {user?.role === "admin" ? (
+                  <button
+                    onClick={() => navigate(`/admin/views/${blog._id}`)}
+                    className="flex items-center gap-1 cursor-pointer"
+                  >
+                   <i className="fa-solid fa-eye text-[10px]"></i>  {blog.views?.length || 0}
+                  </button>
+                  ) : (
+                  <span> <i className="fa-solid fa-eye text-[10px]"></i>  {blog.views?.length || 0} </span>
+                  )}
                 </div>
               </div>
             </div>

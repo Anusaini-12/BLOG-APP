@@ -68,3 +68,16 @@ export const adminDashboard = async(token) => {
   });
   return res.data;
 }
+
+export const getBlogViewers = async (id, token) => {
+  const res = await axios.get(
+    `${API_URL}/${id}/viewers`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res.data;
+};
+

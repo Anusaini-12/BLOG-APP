@@ -17,11 +17,11 @@ import AdminLayout from './pages/admin/AdminLayout';
 import UsersPage from './pages/admin/UsersPage';
 import BlogsPage from './pages/admin/BlogsPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import ViewsPage from './pages/admin/ViewsPage';
 
 const App = () => {
 
-  
-  
+
   return (
      <BrowserRouter>
         <Routes>
@@ -32,6 +32,7 @@ const App = () => {
           <Route index element={<AdminDashboard />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="blogs" element={<BlogsPage />} />
+          <Route path="views/:id" element={<ViewsPage />} />
          </Route>
         </Route>
  

@@ -4,7 +4,6 @@ import { Link, NavLink } from "react-router-dom";
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   return (
     <>
-      {/* overlay (mobile) */}
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
@@ -14,7 +13,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
       <aside
         className={`fixed top-0 left-0 z-50 h-full w-64
-        bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950
+        bg-black/30 backdrop-blur-xl
         text-white p-6 border-r border-white/10
         transform transition-transform duration-300
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
@@ -43,7 +42,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           <NavLink to="/admin/blogs" className="px-3 py-2 rounded hover:bg-white/10">
             Blogs
           </NavLink>
-        </nav>
+        </nav> 
+
+
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mt-8" />
 
         <div className="mt-auto pt-6">
           <Link

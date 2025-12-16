@@ -6,7 +6,8 @@ import {
   getAllBlogs,
   deleteUserById,
   deleteBlogById,
-  getDashboardStats
+  getDashboardStats,
+  getViewers
 } from "../controllers/adminController.js";
 import protect from "../middleware/auth.js";
 import isAdmin from "../middleware/isAdmin.js";
@@ -34,5 +35,6 @@ router.delete("/blogs/:id", protect, isAdmin, deleteBlogById);
 // Get dashboard stats
 router.get("/dashboard", protect, isAdmin, getDashboardStats);
 
+router.get("/:id/viewers", protect, isAdmin, getViewers);
 
 export default router;

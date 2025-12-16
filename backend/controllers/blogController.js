@@ -62,11 +62,17 @@ export const createBlog = expressAsyncHandler( async(req, res) => {
 export const getBlogs = expressAsyncHandler( async(req, res) => {
     const blogs = await Blog.find()
     .populate("author", "name email")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
+
+    const formattedBlogs = blogs.map(blog => ({
+       ...blog,
+       viewsCount: blog.views.length,
+    }));
 
     res.status(200).json({
         success: true,
-        blogs,
+        blogs: formattedBlogs,
     });
 });
 
@@ -295,44 +301,43 @@ export const deleteComment = expressAsyncHandler( async(req, res) => {
     });
 });
 
-/* ------------------ COUNT VIEW ------------------ */
+/* ------------------ VIEWS COUNT ------------------ */
 export const countView = expressAsyncHandler(async (req, res) => {
-  const blog = await Blog.findById(req.params.id);
+  const blogId = req.params.id;
+  const userId = req.user?._id;
+
+  if (!userId) {
+    res.status(401);
+    throw new Error("Unauthorized");
+  }
+
+  const blog = await Blog.findById(blogId);
   if (!blog) {
     res.status(404);
     throw new Error("Blog not found");
   }
 
-  const userId = req.user._id;
-
-  // Only add the user if they haven't viewed before
-  if (!blog.viewers.some(v => v.toString() === userId.toString())) {
-    blog.viewers.push(userId);
-    blog.views += 1;
-    await blog.save();
+  if (!Array.isArray(blog.views)) {
+    blog.views = [];
   }
 
-  // Populate viewers for frontend
-  await blog.populate("viewers", "name email");
- 
-  res.status(200).json({
-    views: blog.views,
-    viewers: blog.viewers, // includes all previous + current viewers
-  });
-});
+  const alreadyViewed = blog.views.some(
+    (v) => v.user && v.user.toString() === userId.toString()
+  );
 
-/* ------------------ GET VIEWERS ------------------ */
-export const getViewers = expressAsyncHandler(async (req, res) => {
-  const blog = await Blog.findById(req.params.id).populate("viewers", "name email");
-
-  if (!blog) {
-    res.status(404);
-    throw new Error("Blog not found!");
+  if (!alreadyViewed) {
+    blog.views.push({
+      user: userId,
+      viewedAt: new Date(),
+    });
+    await blog.save();
   }
 
   res.status(200).json({
     success: true,
-    totalViews: blog.views,
-    viewers: blog.viewers,
+    totalViews: blog.views.length,
   });
 });
+
+
+

@@ -13,37 +13,22 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import { ConfirmDelete } from "../../components/ConfirmDelete";
 import { useToast } from "../../context/ToastContext";
+import { useRef } from "react";
 
 const BlogDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const toast = useToast();
+  const hasViewed = useRef(false);
 
 useEffect(() => {
-  if (!user || !id) return; 
+  if (!id || !token) return;
+  if (hasViewed.current) return;
 
-  const recordView = async () => {
-    try {
-      const res = await countBlogView(id, token);
-
-      setBlog(prev =>
-        prev ? { ...prev, views: res.views } : prev
-      );
-
-      // const uniqueViewers = Array.from(
-      //   new Map(res.viewers.map(v => [v._id, v])).values()
-      // );
-
-      // setViewers(uniqueViewers);
-    } catch (err) {
-      console.error("Failed to count view", err);
-    }
-  };
-
-  recordView();
-}, [id, user, token]);
-
+  hasViewed.current = true;
+  countBlogView(id, token);
+}, [id, token]);
 
 
   const [blog, setBlog] = useState(null);

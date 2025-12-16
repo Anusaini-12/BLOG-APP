@@ -61,3 +61,12 @@
 .no-scrollbar {
   scrollbar-width: none; /* Firefox */
 }
+
+.no-scrollbar-table {
+  -ms-overflow-style: none;  /* IE 10+ */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.no-scrollbar-table::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
+}

@@ -132,17 +132,3 @@ export const countBlogView = async (id, token) => {
   return res.data;
 };
 
-//Get viewers of a blog
-export const getBlogViewers = async (id, token) => {
-  try {
-    const res = await axios.get(`${API_URL}/api/blogs/${id}/viewers`, {
-      headers: {
-        Authorization: `Bearer ${token}`, 
-      },
-    });
-    return res.data;
-  } catch (err) {
-    console.error("Error fetching blog viewers:", err);
-    return { viewers: [] };
-  }
-};
